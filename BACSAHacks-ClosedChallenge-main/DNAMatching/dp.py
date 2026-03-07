@@ -66,11 +66,11 @@ def seq_align(seq1, seq2):
     alignMatches = alignMatches[::-1]
     seq2Alignment = seq2Alignment[::-1]
 
-    print("--------------RESULTS--------------")
-    print(seq1Alignment)
-    print(alignMatches)
-    print(seq2Alignment)
-    print(f"Alignment Score: {alignMatrix[lenSeq2][lenSeq1]}")
+    #print("--------------RESULTS--------------")
+    #print(seq1Alignment)
+    #print(alignMatches)
+    #print(seq2Alignment)
+    #print(f"Alignment Score: {alignMatrix[lenSeq2][lenSeq1]}")
     return alignMatrix[lenSeq2][lenSeq1]
 
 # if __name__ == "__main__":
