@@ -25,3 +25,10 @@ app = Flask(__name__)
 def get_current_time():
     return {'time': time.time()}
 
+@app.route('/upload/file')
+def get_file():
+    return
+
+@app.route('/upload/folder')
+def get_folder():
+    return
