@@ -1,6 +1,10 @@
 import os
 import cv2
 
+# eroding, dilating, smoothing, bluring
+# deal with orientation
+
+
 folder = "Suspect_Fingerprints"
 
 # Load Evidence (Distored Fingerprint)
