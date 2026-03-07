@@ -21,9 +21,12 @@ ranking = [] # list of dictionary of ranking of suspects and scores
 if target_seq and sequences: 
     # compare the suspect sequence with all crime sequence
     for seq in target_seq: # if there are more than one set of DNA sequence found at scene
+        target = seq_align(seq, seq) #target score if DNA perfectly aligns with crime scene
+        print(target)
         for item in sequences:
             sequences[item][1] = seq_align(sequences[item][0], seq)
-            print(sequences[item][1])
+            # print(sequences[item][1])
+            sequences[item][0] = max(0.00, round(sequences[item][1]/target*100, 2)) # change dna sequence to confidence level (0-100)
     ranking.append(dict(sorted(sequences.items(), key=lambda item: item[1][1], reverse=True)))
     # print(ranking)
 else:
