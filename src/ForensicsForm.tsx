@@ -15,16 +15,20 @@ export default function ForensicsForm() {
     e.preventDefault();
     const formData = new FormData(e.currentTarget);
 
-    const fingerprintFile = formData.get('crimescene-fingerprint-bmp');
-    const dnaFile = formData.get('crimescene-dna-fasta');
-    const suspectDnaFile = formData.get('suspect-dna-fasta');
-    const suspectFiles = formData.getAll('suspect-folder');
+    // const fingerprintFile = formData.get('crimescene-fingerprint-bmp');
+    // const dnaFile = formData.get('crimescene-dna-fasta');
+    // const suspectDnaFile = formData.get('suspect-dna-fasta');
+    // const suspectFiles = formData.getAll('suspect-folder');
 
-    // Example: log file info
-    console.log('Fingerprint:', fingerprintFile);
-    console.log('DNA:', dnaFile);
-    console.log('Suspect DNA:', suspectDnaFile);
-    console.log('All Suspect Files:', suspectFiles);
+    // Send all files to backend
+    fetch('/api/upload', {
+        method: 'POST',
+        body: formData,
+    })
+    .then(res => res.json())
+    .then(data => {
+    console.log('Upload result:', data);
+    });
   }
 
   return (
@@ -45,6 +49,7 @@ export default function ForensicsForm() {
                     id="upload-crimescene-fingerprint-bmp"
                     name="crimescene-fingerprint-bmp"
                     type="file"
+                    accept=".bmp"
                   />
                 </Field>
                 <Field>
@@ -55,6 +60,7 @@ export default function ForensicsForm() {
                     id="upload-crimescene-dna-fasta"
                     name="crimescene-dna-fasta"
                     type="file"
+                    accept=".fasta"
                   />
                 </Field>
                 <Field>
@@ -65,6 +71,7 @@ export default function ForensicsForm() {
                     id="upload-suspect-dna-fasta"
                     name="suspect-dna-fasta"
                     type="file"
+                    accept=".fasta"
                   />
                 </Field>
                 <Field>
@@ -76,6 +83,7 @@ export default function ForensicsForm() {
                     name="suspect-folder"
                     type="file"
                     multiple
+                    accept=".bmp"
                   />
                 </Field>
             </FieldGroup>
