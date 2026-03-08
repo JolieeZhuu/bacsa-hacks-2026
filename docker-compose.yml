@@ -1,0 +1,30 @@
+services:
+  backend:
+    build:
+      context: ./api
+      dockerfile: Dockerfile.backend
+    container_name: thetale-backend
+    env_file:
+      - ./api/.env
+    volumes:
+      # Persist uploaded files between restarts
+      - uploads:/app/FingerprintExample
+      - uploads_dna:/app/DNAMatching
+    ports:
+      - "8000:8000"
+    restart: unless-stopped
+
+  frontend:
+    build:
+      context: .
+      dockerfile: Dockerfile.frontend
+    container_name: thetale-frontend
+    ports:
+      - "80:80"
+    depends_on:
+      - backend
+    restart: unless-stopped
+
+volumes:
+  uploads:
+  uploads_dna:
