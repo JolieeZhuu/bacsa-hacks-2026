@@ -84,7 +84,26 @@ export function Sidebar({ onResultsReady }: SidebarProps) {
         fetch('/api/generate', {
             method: 'POST',
             headers: { 'Content-Type': 'application/json' },
-            body: JSON.stringify({ prompt: "Based on this forensic analysis, describe the fingerprint pattern and DNA alignment findings for the top suspect." })
+            body: JSON.stringify({ prompt: `Acting as a Senior Forensic Pathologist, synthesize the following raw data into a formal Case Report. Format your response using ONLY these conventions:
+                - Section headers as "1. Title", "2. Title" etc.
+                - Sub-headers as "A. Title", "B. Title" etc.
+                - Bullet points using "* " prefix
+                - Tables using | col | col | format with a separator row
+                - No markdown bold (**text**), no #, no extra blank lines between bullets
+                - Plain paragraph text otherwise
+
+                Data to analyze:
+                - Primary suspect by DNA: ${rankingData.ranking[0]?.id} with alignment score ${rankingData.ranking[0]?.score}
+                - DNA ranking: ${rankingData.ranking.map((r: any) => `${r.id}: ${r.score}`).join(', ')}
+                - Primary suspect by fingerprint: ${fpData.ranking[0]?.[0]?.replace(/\.[^/.]+$/, '')} with score ${fpData.ranking[0]?.[2]}
+                - Fingerprint ranking: ${fpData.ranking.map((r: any) => `${r[0].replace(/\.[^/.]+$/, '')}: ${r[2]}`).join(', ')}
+                ${todData ? `- Body temperature: ${bodyTemp}°C, Ambient temperature: ${ambientTemp}°C, Estimated TOD: ${todData.hours.toString().padStart(2,'0')}:${todData.minutes.toString().padStart(2,'0')}` : '- No temperature data provided'}
+
+                Your report must include:
+                1. Executive Summary
+                2. DNA Analysis (with ranking table)
+                3. Fingerprint Analysis (with ranking table)
+                ${todData ? '4. Post-Mortem Interval Analysis\n5. Final Determination' : '4. Final Determination'}` })
         })
             .then(res => res.json())
             .then(geminiText => {
@@ -93,7 +112,7 @@ export function Sidebar({ onResultsReady }: SidebarProps) {
                     tod: todData,
                     fingerprints: fpData.ranking,
                     sequences: rankingData.topseq,
-                    gemini: geminiText
+                    gemini: geminiText.response
                 });
             })
             .catch(() => {
