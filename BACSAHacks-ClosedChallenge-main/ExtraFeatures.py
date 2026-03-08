@@ -1,7 +1,14 @@
 def get_tod(body_temp, ambient_temp, discov_h, discov_m):
     # using simplified Glaister Equation
-    # Hours since death = (98.6 - current_temp) / 1.5
-    time_passed = (98.6 - body_temp) / 1.5
+    # Hours since death = (ambient - current_temp) / 0.75 or depending on temperature
+    if ambient_temp < 15:
+        rate = 1.1
+    elif ambient_temp > 27:
+        rate = 0.5
+    else:
+        rate = 0.83
+    
+    time_passed = (36.9 - body_temp) / rate
     death_time = discov_h + discov_m/60 - time_passed
     
     # clock
@@ -20,4 +27,4 @@ def get_tod(body_temp, ambient_temp, discov_h, discov_m):
     
     return hours, minutes, day
 
-# print(get_tod(0, 21, 2, 14))
+# print(get_tod(21, 11, 14, 15))
