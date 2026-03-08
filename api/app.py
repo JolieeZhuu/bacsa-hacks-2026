@@ -15,7 +15,7 @@ app = Flask(__name__)
 CORS(app, resources={r"/api/*": {"origins": "http://localhost:5173"}})
 
 # The client gets the API key from the environment variable `GEMINI_API_KEY`.
-client = genai.Client()
+client = genai.Client(api_key=os.getenv('GEMINI_API_KEY'))
 
 # Base directory = wherever app.py lives (inside /api)
 BASE_DIR = os.path.dirname(os.path.abspath(__file__))
@@ -148,7 +148,8 @@ def generate_text():
 
     try:
         response = client.models.generate_content(
-            model="gemini-2.0-flash-lite", contents=prompt
+            model="gemini-2.0-flash-lite",
+            contents=prompt
         )
         print(response.text)
         return jsonify({'response': response.text})
