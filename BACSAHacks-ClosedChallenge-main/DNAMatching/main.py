@@ -17,19 +17,27 @@ for record in SeqIO.parse("Suspect_DNA.fasta", "fasta"):
     sequences[record.id] = [str(record.seq),0] # Dictonary with key = record ID, value = [seqeunce, alignment score]
 
 ranking = [] # list of dictionary of ranking of suspects and scores
+top_seq = []
 # make sure there were at least one crime scene and suspect DNA sequence
 if target_seq and sequences: 
     # compare the suspect sequence with all crime sequence
     for seq in target_seq: # if there are more than one set of DNA sequence found at scene
-        target = seq_align(seq, seq) #target score if DNA perfectly aligns with crime scene
-        print(target)
+        target = seq_align(seq, seq)[0] #target score if DNA perfectly aligns with crime scene
+        #print(target)
+        DNA = {} # new place to collect the DNA sequences to return top sequence only
         for item in sequences:
-            sequences[item][1] = seq_align(sequences[item][0], seq)
-            # print(sequences[item][1])
+            #print(sequences[item][0])
+            sequences[item][1] = seq_align(seq, sequences[item][0])[0] # crime scene then suspect
+            #print(sequences[item][1])
+            DNA[item] = sequences[item][0]
+            #print(DNA[item])
             sequences[item][0] = max(0.00, round(sequences[item][1]/target*100, 2)) # change dna sequence to confidence level (0-100)
-    ranking.append(dict(sorted(sequences.items(), key=lambda item: item[1][1], reverse=True)))
-    # print(ranking)
+        ordered_seq = dict(sorted(sequences.items(), key=lambda item: item[1][1], reverse=True))
+        ranking.append(ordered_seq)
+        top_seq.append([seq, seq_align(seq, DNA[next(iter(ordered_seq))])[1], seq_align(seq, DNA[next(iter(ordered_seq))])[2]])
+        # print(top_seq)
+        # print(ranking)
 else:
     print("Insufficient DNA sequence provided.")
 
-print(ranking)
+# print(ranking, top_seq)

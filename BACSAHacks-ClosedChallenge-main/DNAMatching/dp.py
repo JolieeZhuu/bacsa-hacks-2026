@@ -71,7 +71,8 @@ def seq_align(seq1, seq2):
     #print(alignMatches)
     #print(seq2Alignment)
     #print(f"Alignment Score: {alignMatrix[lenSeq2][lenSeq1]}")
-    return alignMatrix[lenSeq2][lenSeq1]
+    #print([alignMatrix[lenSeq2][lenSeq1], seq1Alignment, alignMatches, seq2Alignment])
+    return [alignMatrix[lenSeq2][lenSeq1], alignMatches, seq2Alignment]
 
 # if __name__ == "__main__":
 #     # seq1 = "ACTGATTCA"
